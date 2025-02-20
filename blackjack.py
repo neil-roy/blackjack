@@ -116,23 +116,27 @@ def play_hand(player, dealer, bet, deck):
 
     print("Dealer's up card:")
     dealer.show_up_card()
-
+    print("-------")
     print("Player's hand:")
     player.show_hand()
+    print("-------")
 
     # Check for blackjack
     if player.score == 21 and dealer.score != 21:
         print("Blackjack! Player wins!")
         player.money += 1.5 * bet + bet
+        time.sleep(2)
         return
 
     if dealer.score == 21 and player.score != 21:
         print("Blackjack! Dealer wins!")
         dealer.show_hand()
+        time.sleep(2)
         return
     
     # Player's turn
     while player.score < 21:
+        print("-------")
         action = input("Would you like to hit or stand? (h/s): ")
         if action == "h":
             player.hit(deck)
@@ -147,7 +151,7 @@ def play_hand(player, dealer, bet, deck):
             break
         if player.score == 21:
             break
-    time.sleep(3)
+    time.sleep(2)
     print("-----------------------------------")
 
     # Dealer's turn
@@ -159,12 +163,13 @@ def play_hand(player, dealer, bet, deck):
     time.sleep(2)
 
     while dealer.score < 17:
+        print("-------")
         dealer.hit(deck)
         dealer.show_hand()
         dealer.show_score()
         time.sleep(2)
 
-    if dealer.score > 21:
+    if dealer.score > 21 and not bust:
         print("Dealer busts! Player wins!")
         player.money += bet * 2
         return
@@ -172,7 +177,7 @@ def play_hand(player, dealer, bet, deck):
     if dealer.score > player.score or bust:
         print("Dealer wins!")
         return
-    elif dealer.score < player.score:
+    elif dealer.score < player.score and not bust:
         print("Player wins!")
         player.money += bet * 2
         return
@@ -196,11 +201,18 @@ def main():
     while player.money > 0 and deck.count() > deck_penetration:
         print("-----------------------------")
         print("Player's money:", player.money)
-        bet = int(input("Enter bet amount: "))
+        bet = float(input("Enter bet amount: "))
+        if (bet == 0 or bet > player.money):
+            break
+        print("-----------------------------")
         play_hand(player, dealer, bet, deck)
         dealer.reset()
         player.reset()
         print("-----------------------------")
 
+    print("\n\n-----------------------------------")
+    print("Game over!")
+    print("Player's money:", player.money)
+    print("Thanks for playing!\n\n")
 main()
     
