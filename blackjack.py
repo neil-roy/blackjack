@@ -81,10 +81,10 @@ class Dealer:
 
 # Define Player Class
 class Player:
-    def __init__(self):
+    def __init__(self, bal=500):
         self.hand = []
         self.score = 0
-        self.money = 500
+        self.money = bal
     
     def hit(self, deck):
         card = deck.draw()
@@ -183,13 +183,17 @@ def play_hand(player, dealer, bet, deck):
 
 # Define main function
 def main():
-    deck = Deck()
+    deck_penetration = 52
+    start_money = 750
+
+
+    deck = Deck(num_decks=6)
     deck.shuffle()
 
     dealer = Dealer()
-    player = Player()
+    player = Player(bal=start_money)
 
-    while player.money > 0:
+    while player.money > 0 and deck.count() > deck_penetration:
         print("-----------------------------")
         print("Player's money:", player.money)
         bet = int(input("Enter bet amount: "))
