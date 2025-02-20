@@ -24,7 +24,7 @@ class Deck:
                 for r in range(1, 14):
                     if r == 1:
                         rank = "Ace"
-                        value = 11
+                        value = 11 # or 1
                     elif r == 11:
                         rank = "Jack"
                         value = 10
