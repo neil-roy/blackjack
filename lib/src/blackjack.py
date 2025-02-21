@@ -8,6 +8,7 @@ def play_hand(player, dealer, bet, deck):
     # take away money from bet
     player.money -= bet
     bust = 0
+    surrender = 0
 
     # Initial deal
     player.hit(deck)
@@ -35,10 +36,23 @@ def play_hand(player, dealer, bet, deck):
         time.sleep(2)
         return
     
+    # option - surrender
+    first_option = 1
+
     # Player's turn
     while player.score < 21:
         print("-------")
-        action = input("Would you like to hit or stand? (h/s): ")
+        if (first_option):
+            action = input("Would you like to hit, stand, or surrender? (h/s/u): ")
+            if action == "u":
+                player.money += 0.5 * bet
+                print("Player surrenders!")
+                surrender = 1
+                break
+            if (action == "h" or action == "s" or action == "u"):
+                first_option = 0
+        else:
+            action = input("Would you like to hit or stand? (h/s): ")
         if action == "h":
             player.hit(deck)
             # logic for aces
@@ -83,6 +97,11 @@ def play_hand(player, dealer, bet, deck):
         dealer.show_hand()
         dealer.show_score()
         time.sleep(2)
+
+    print("-----------------------------------\n")
+    if surrender:
+        print("Player surrenders! Half the bet returned to balance!")
+        return
 
     if dealer.score > 21 and not bust:
         print("Dealer busts! Player wins!")
