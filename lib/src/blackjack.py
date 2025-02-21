@@ -41,6 +41,13 @@ def play_hand(player, dealer, bet, deck):
         action = input("Would you like to hit or stand? (h/s): ")
         if action == "h":
             player.hit(deck)
+            # logic for aces
+            if player.score > 21:
+                for card in player.hand:
+                    if card.rank == "Ace" and card.value == 11:
+                        card.value = 1
+                        player.score -= 10
+                        break
             player.show_hand()
             player.show_score()
 
@@ -66,6 +73,13 @@ def play_hand(player, dealer, bet, deck):
     while dealer.score < 17:
         print("-------")
         dealer.hit(deck)
+        # logic for aces
+        if dealer.score > 21:
+            for card in dealer.hand:
+                if card.rank == "Ace" and card.value == 11:
+                    card.value = 1
+                    dealer.score -= 10
+                    break
         dealer.show_hand()
         dealer.show_score()
         time.sleep(2)
