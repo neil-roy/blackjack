@@ -89,7 +89,7 @@ while run:
                 idle = False
                 print("Deal button clicked. Starting the game...")
                 initial_deal()
-        if event.type == pygame.MOUSEBUTTONDOWN and not idle:
+        elif event.type == pygame.MOUSEBUTTONDOWN and not idle:
             mouse_x, mouse_y = event.pos
             if 350 <= mouse_x <= 450 and 250 <= mouse_y <= 300:
                 # player hits
