@@ -111,7 +111,25 @@ while run:
         # Display cards after dealer's turn
         display_cards(card_list)
         pygame.display.update()
+        pygame.time.delay(1000)
+        state = "end"
+    
+    if state == "end":
+        # Display final results
+        SCREEN.fill((0, 0, 0))
+        font = pygame.font.Font(None, 36)
+        if player.score > 21:
+            text = font.render('Player Busts! Dealer Wins!', True, (255, 0, 0))
+        elif dealer.score > 21 or player.score > dealer.score:
+            text = font.render('Player Wins!', True, (0, 255, 0))
+        elif player.score < dealer.score:
+            text = font.render('Dealer Wins!', True, (255, 0, 0))
+        else:
+            text = font.render('Push!', True, (255, 255, 0))
+        SCREEN.blit(text, (SCREEN_WIDTH // 2 - text.get_width() // 2, SCREEN_HEIGHT // 2 - text.get_height() // 2))
+        pygame.display.update()
         pygame.time.delay(2000)
+        state = "start"
 
 
     # event handling
