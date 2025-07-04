@@ -16,6 +16,7 @@ BACKGROUND = BACKGROUND.convert() # faster rendering
 
 run = True
 state = "start"
+bet_amount = 0
 card_list = []  # List to hold card objects for display
 
 # Initialize deck, player, dealer
@@ -82,16 +83,41 @@ def dealer_turn():
 
 # game loop
 while run:
+    # DEBUG WHERE MOUSE IS
+    # mouse_x, mouse_y = pygame.mouse.get_pos()
+    # print(f"Mouse Position: ({mouse_x}, {mouse_y})")
 
     # add the background image
     SCREEN.blit(BACKGROUND, (0, 0))
 
+    # draw the player balance in the top right
+    font = pygame.font.Font(None, 36)
+    balance_text = font.render(f'Balance: ${player.money}', True, (255, 255, 255))
+    SCREEN.blit(balance_text, (SCREEN_WIDTH - balance_text.get_width() - 10, 10))
+
     # draw the deal button:
     if state == "start":
+        # reset max bet
+        if bet_amount > player.money:
+            bet_amount = player.money
         pygame.draw.rect(SCREEN, (0, 255, 0), (350, 250, 100, 50))
         font = pygame.font.Font(None, 36)
         text = font.render('Deal', True, (255, 255, 255))
         SCREEN.blit(text, (375, 265))
+        # draw the bet amount adjuster
+        font = pygame.font.Font(None, 36)
+        bet_text = font.render(f'Bet: ${bet_amount}', True, (255, 255, 255))
+        SCREEN.blit(bet_text, (SCREEN_WIDTH // 2 - bet_text.get_width() // 2, 200))
+        # draw the bet amount increase and decrease buttons
+        pygame.draw.rect(SCREEN, (0, 0, 255), (300, 200, 50, 30))
+        text = font.render('+', True, (255, 255, 255))
+        SCREEN.blit(text, (320, 205))
+        pygame.draw.rect(SCREEN, (255, 0, 0), (450, 200, 50, 30))
+        text = font.render('-', True, (255, 255, 255))
+        SCREEN.blit(text, (470, 205))
+
+
+        
     
     if state == "player_turn":
         # draw the hit and stand buttons
@@ -102,11 +128,17 @@ while run:
         pygame.draw.rect(SCREEN, (255, 0, 0), (350, 320, 100, 50))
         text = font.render('Stand', True, (255, 255, 255))
         SCREEN.blit(text, (365, 335))
+        font = pygame.font.Font(None, 36)
+        bet_text = font.render(f'Bet: ${bet_amount}', True, (255, 255, 255))
+        SCREEN.blit(bet_text, (SCREEN_WIDTH // 2 - bet_text.get_width() // 2, 200))
 
         # Display cards
         display_cards(card_list)
     
     if state == "dealer_turn":
+        font = pygame.font.Font(None, 36)
+        bet_text = font.render(f'Bet: ${bet_amount}', True, (255, 255, 255))
+        SCREEN.blit(bet_text, (SCREEN_WIDTH // 2 - bet_text.get_width() // 2, 200))
         dealer_turn()
         # Display cards after dealer's turn
         display_cards(card_list)
@@ -122,10 +154,12 @@ while run:
             text = font.render('Player Busts! Dealer Wins!', True, (255, 0, 0))
         elif dealer.score > 21 or player.score > dealer.score:
             text = font.render('Player Wins!', True, (0, 255, 0))
+            player.money += bet_amount * 2  # Player wins the bet amount back plus the bet
         elif player.score < dealer.score:
             text = font.render('Dealer Wins!', True, (255, 0, 0))
         else:
             text = font.render('Push!', True, (255, 255, 0))
+            player.money += bet_amount  # Player gets the bet amount back
         SCREEN.blit(text, (SCREEN_WIDTH // 2 - text.get_width() // 2, SCREEN_HEIGHT // 2 - text.get_height() // 2))
         pygame.display.update()
         pygame.time.delay(2000)
@@ -146,8 +180,18 @@ while run:
             if 350 <= mouse_x <= 450 and 250 <= mouse_y <= 300:
                 # start the game
                 state = "player_turn"
+                # update player balance
+                player.money -= bet_amount
                 # print("Deal button clicked. Starting the game...")
                 initial_deal()
+            elif 300 <= mouse_x <= 350 and 200 <= mouse_y <= 230:
+                # print("TEST 2")
+                if bet_amount < player.money:
+                    bet_amount += 10
+                    # print("TEST")
+            elif 450 <= mouse_x <= 500 and 200 <= mouse_y <= 230:
+                if bet_amount > 0:
+                    bet_amount -= 10
         elif event.type == pygame.MOUSEBUTTONDOWN and state == "player_turn":
             mouse_x, mouse_y = event.pos
             if 350 <= mouse_x <= 450 and 250 <= mouse_y <= 300:
@@ -156,13 +200,12 @@ while run:
                     state = "dealer_turn"
             elif 350 <= mouse_x <= 450 and 320 <= mouse_y <= 370:
                 state = "dealer_turn"
-
     
 
 
     
     # update the display
-    pygame.display.update()
+    pygame.display.flip()
 
 
 
