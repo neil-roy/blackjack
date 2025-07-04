@@ -129,7 +129,12 @@ while run:
         SCREEN.blit(text, (SCREEN_WIDTH // 2 - text.get_width() // 2, SCREEN_HEIGHT // 2 - text.get_height() // 2))
         pygame.display.update()
         pygame.time.delay(2000)
+        # reset the game
+        card_list.clear()
+        player.reset()
+        dealer.reset()
         state = "start"
+
 
 
     # event handling
