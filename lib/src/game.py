@@ -15,7 +15,7 @@ BACKGROUND = pygame.image.load('lib/assets/other/red_background.jpg')
 BACKGROUND = BACKGROUND.convert() # faster rendering
 
 run = True
-idle = True
+state = "start"
 card_list = []  # List to hold card objects for display
 
 # Initialize deck, player, dealer
@@ -70,13 +70,13 @@ while run:
     SCREEN.blit(BACKGROUND, (0, 0))
 
     # draw the deal button:
-    if idle:
+    if state == "start":
         pygame.draw.rect(SCREEN, (0, 255, 0), (350, 250, 100, 50))
         font = pygame.font.Font(None, 36)
         text = font.render('Deal', True, (255, 255, 255))
         SCREEN.blit(text, (375, 265))
     
-    if not idle:
+    if state == "player_turn":
         # draw the hit and stand buttons
         pygame.draw.rect(SCREEN, (0, 0, 255), (350, 250, 100, 50))
         font = pygame.font.Font(None, 36)
@@ -94,30 +94,22 @@ while run:
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             run = False
-        if event.type == pygame.MOUSEBUTTONDOWN and idle:
+        if event.type == pygame.MOUSEBUTTONDOWN and state == "start":
             mouse_x, mouse_y = event.pos
             if 350 <= mouse_x <= 450 and 250 <= mouse_y <= 300:
                 # start the game
-                idle = False
+                state = "player_turn"
                 # print("Deal button clicked. Starting the game...")
                 initial_deal()
-        elif event.type == pygame.MOUSEBUTTONDOWN and not idle:
+        elif event.type == pygame.MOUSEBUTTONDOWN and state == "player_turn":
             mouse_x, mouse_y = event.pos
             if 350 <= mouse_x <= 450 and 250 <= mouse_y <= 300:
-                # player hits
-                # print("Hit button clicked. Player hits.")
                 card_list.append((player.hit(deck), "player", len([c for c, o, p in card_list if o == "player"]) + 1))
-                if player.score > 21:
-                    # print("Player busts!")
-                    player.reset()
-                    dealer.reset()
-                    card_list.clear()
-                    idle = True
+                if player.score >= 21:
+                    state = "dealer_turn"
             elif 350 <= mouse_x <= 450 and 320 <= mouse_y <= 370:
-                # player stands
-                # print("Stand button clicked. Player stands.")
-                dealer_turn()
-                
+                state = "dealer_turn"
+
     
 
 
