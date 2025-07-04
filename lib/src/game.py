@@ -65,6 +65,15 @@ while run:
         SCREEN.blit(text, (375, 265))
     
     if not idle:
+        # draw the hit and stand buttons
+        pygame.draw.rect(SCREEN, (0, 0, 255), (350, 250, 100, 50))
+        font = pygame.font.Font(None, 36)
+        text = font.render('Hit', True, (255, 255, 255))
+        SCREEN.blit(text, (375, 265))
+        pygame.draw.rect(SCREEN, (255, 0, 0), (350, 320, 100, 50))
+        text = font.render('Stand', True, (255, 255, 255))
+        SCREEN.blit(text, (365, 335))
+        
         # Display cards
         display_cards(card_list)
 
