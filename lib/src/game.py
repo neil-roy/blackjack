@@ -105,6 +105,13 @@ while run:
 
         # Display cards
         display_cards(card_list)
+    
+    if state == "dealer_turn":
+        dealer_turn()
+        # Display cards after dealer's turn
+        display_cards(card_list)
+        pygame.display.update()
+        pygame.time.delay(2000)
 
 
     # event handling
