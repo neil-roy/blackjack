@@ -31,9 +31,21 @@ def initial_deal():
     card_list.clear()
     # append the cards to the card_list
     card_list.append((player.hit(deck), "player", 1))
+    display_cards(card_list)
+    pygame.display.update()
+    pygame.time.delay(500) # PLACE HOLDER UNTIL ANIMATION
     card_list.append((dealer.hit(deck), "dealer", 1))
+    display_cards(card_list)
+    pygame.display.update()
+    pygame.time.delay(500)
     card_list.append((player.hit(deck), "player", 2))
+    display_cards(card_list)
+    pygame.display.update()
+    pygame.time.delay(500)
     card_list.append((dealer.hit(deck), "dealer", 2))
+    display_cards(card_list)
+    pygame.display.update()
+    pygame.time.delay(500)
 
 def display_cards(card_list):
     for card, owner, position in card_list:
@@ -42,10 +54,10 @@ def display_cards(card_list):
         card_image = pygame.transform.scale(card_image, (100, 150))
         # Calculate the position to draw the card
         if owner == "player":
-            x = 100 + (position - 1) * 120
+            x = 100 + (position - 1) * 50
             y = 400
         elif owner == "dealer":
-            x = 100 + (position - 1) * 120
+            x = 100 + (position - 1) * 50
             y = 50
         # Draw the card on the screen
         SCREEN.blit(card_image, (x, y))
@@ -56,9 +68,14 @@ def dealer_turn():
     while dealer.score < 17:
         card = dealer.hit(deck)
         card_list.append((card, "dealer", len([c for c, o, p in card_list if o == "dealer"]) + 1))
+        display_cards(card_list)
+        pygame.display.update()
+        pygame.time.delay(500)
         # print(f"Dealer hits: {card}")
         if dealer.score > 21:
-            # print("Dealer busts!")
+            display_cards(card_list)
+            pygame.display.update()
+            pygame.time.delay(700)
             break
     # print(f"Dealer's final score: {dealer.score}")
 
