@@ -73,7 +73,7 @@ while run:
         pygame.draw.rect(SCREEN, (255, 0, 0), (350, 320, 100, 50))
         text = font.render('Stand', True, (255, 255, 255))
         SCREEN.blit(text, (365, 335))
-        
+
         # Display cards
         display_cards(card_list)
 
@@ -89,6 +89,17 @@ while run:
                 idle = False
                 print("Deal button clicked. Starting the game...")
                 initial_deal()
+        if event.type == pygame.MOUSEBUTTONDOWN and not idle:
+            mouse_x, mouse_y = event.pos
+            if 350 <= mouse_x <= 450 and 250 <= mouse_y <= 300:
+                # player hits
+                print("Hit button clicked. Player hits.")
+                card_list.append((player.hit(deck), "player", len([c for c, o, p in card_list if o == "player"]) + 1))
+            elif 350 <= mouse_x <= 450 and 320 <= mouse_y <= 370:
+                # player stands
+                print("Stand button clicked. Player stands.")
+                idle = True
+                # dealer's turn logic can be added here
     
 
 
