@@ -107,11 +107,17 @@ while run:
                 # player hits
                 # print("Hit button clicked. Player hits.")
                 card_list.append((player.hit(deck), "player", len([c for c, o, p in card_list if o == "player"]) + 1))
-                
+                if player.score > 21:
+                    # print("Player busts!")
+                    player.reset()
+                    dealer.reset()
+                    card_list.clear()
+                    idle = True
             elif 350 <= mouse_x <= 450 and 320 <= mouse_y <= 370:
                 # player stands
                 # print("Stand button clicked. Player stands.")
                 dealer_turn()
+                
     
 
 
