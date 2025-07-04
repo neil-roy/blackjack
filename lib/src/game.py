@@ -70,7 +70,7 @@ def dealer_turn():
         card_list.append((card, "dealer", len([c for c, o, p in card_list if o == "dealer"]) + 1))
         display_cards(card_list)
         pygame.display.update()
-        pygame.time.delay(500)
+        pygame.time.delay(700)
         # print(f"Dealer hits: {card}")
         if dealer.score > 21:
             display_cards(card_list)
